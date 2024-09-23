@@ -1,0 +1,34 @@
+<div class="second-nav">
+    <ul>
+        <li><a href="#">Pedidos</a></li>
+        <li><a href="#">Inventario</a></li>
+        <li><a href="#">Estadisticas</a></li>
+        <li><a href="#">Informacion</a></li>
+    </ul>
+</div>
+
+<% if (title) { %>
+    <h1 class="title-page"><%= title %></h1>
+    <% 
+    } else {
+      res.redirect('/')
+    } %>
+
+<%- messages() %>
+
+<% if (errors) { %>
+	<ul class="notice">
+   <% errors.array().forEach(error => { %>
+	 <li><%= error.msg %></li>
+  <%  }) %>
+   </ul>
+<% } %>
+<div> 
+    <form id="searchBarMain" method="post" action="/account/q"> 
+        <input type="search" id="query" name="q" placeholder="Buscar pedido">
+        <button type="submit">Search</button>
+    </form>  
+</div>
+<div class="info-box">
+        <%- menuPedidos %>
+</div>
