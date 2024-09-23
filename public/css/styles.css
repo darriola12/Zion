@@ -448,8 +448,6 @@ input {
 .table-cell a:hover {	text-decoration: underline; /* Subrayar al pasar el ratón */	color: #357a38; /* Color del enlace al pasar el ratón */
 }
 
-@media (max-width: 768px) {	.table-pedidos {	  font-size: 14px; /* Tamaño de fuente más pequeño en pantallas pequeñas */	}	.table-header th, .table-cell {	  padding: 10px; /* Menos padding en pantallas pequeñas */	}
-}
 
 
 /* 
@@ -468,5 +466,50 @@ SearchBar */
 }
 
 
+/* 
+PEDIDOS PAGE */
 
 
+.imgPedido{
+	width: 150px;
+	height: 250px;
+	margin: 0 15px;
+	margin-bottom: 40px;
+}
+.pedido-container {
+	
+	flex-direction: column; /* Coloca todo en una sola columna */
+	gap: 20px; /* Espaciado entre secciones */
+	padding: 20px;
+	background-color: #f9f9f9; /* Fondo claro */
+	border: 1px solid #ddd; /* Borde ligero */
+	border-radius: 8px; /* Bordes redondeados */
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+  
+.pedido-info {
+	display: flex;
+	flex-direction: column;
+	background-color: #fff; /* Fondo blanco */
+	padding: 15px;
+	border: 1px solid #ddd; /* Borde ligero */
+	border-radius: 8px; /* Bordes redondeados */
+	margin-bottom: 40px;
+}
+  
+.pedido-info p {
+	margin: 5px 0; /* Espaciado entre párrafos */
+	font-size: 16px; /* Tamaño de fuente */
+}
+
+.pedido-imagenes {
+	display: flex;
+	flex-wrap: wrap; /* Permite que las imágenes se ajusten a múltiples líneas */
+	gap: 10px; /* Espacio entre imágenes */
+}
+  
+.pedido-imagenes img {
+	max-width: 48%; /* Imágenes responsivas (ajustar según el diseño) */
+	height: auto; /* Mantener proporciones */
+	border-radius: 4px; /* Bordes redondeados para las imágenes */
+}

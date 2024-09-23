@@ -56,11 +56,13 @@ Util.singlePedido = async function(pedidoData) {
     div += `<p>Entregado: ${pedidoData.entregado}</p>`;
     div += `<p>Incompleto: ${pedidoData.incompleto}</p>`;
     div += '</div>'; // Cierra el contenedor de información
+    div += `<div><p>Imagenes</p></div>`
 
     // Agrega las imágenes
     if (pedidoData.imagenes && Array.isArray(pedidoData.imagenes)) {
       pedidoData.imagenes.forEach((img) => {
-        div += `<img src="/images/Pedidos/${img.url}" alt="Imagen del pedido">`; // Fuente de la imagen
+        
+        div += `<img  class ="imgPedido" src="/images/Pedidos/${img.url}" alt="Imagen del pedido">`; // Fuente de la imagen
       });
     }
 
