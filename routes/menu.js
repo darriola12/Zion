@@ -6,11 +6,10 @@ const searchBar = require("../controllers/searchBarPedidos")
 
 // Ruta para obtener información sobre un pedido específico
 router.get("/pedido/:pedido_id", utilities.handleErrors(pedidoController.PedidosInfoView)); 
+router.get("/editar-pedido/:pedido_id", utilities.handleErrors(pedidoController.editarPedido));
+router.post("/editar-pedido/:pedido_id", utilities.handleErrors(pedidoController.updatePedido));
 
 
-// Ruta para filtar y buscar la informacion por medio del search Bar 
-
-// router.get("/?q", utilities.handleErrors(searchBar.)); 
 
 
 

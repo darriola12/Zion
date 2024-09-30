@@ -14,9 +14,12 @@ const bcrypt = require("bcryptjs")
 * *************************************** */
 async function buildLogin(req, res, next) {
     let nav = await utilities.getNav()
+    const loggedin = res.locals.loggedin;
+    const logo = loggedin ? await utilities.logoout() : await utilities.logo();
     res.render("account/login", {
       title: "Login",
       nav,
+      logo,
       errors: null,
     })
 }
@@ -28,6 +31,8 @@ async function buildLogin(req, res, next) {
 * *************************************** */
 async function registerAccount(req, res) {
   let nav = await utilities.getNav()
+  const loggedin = res.locals.loggedin;
+  const logo = loggedin ? await utilities.logoout() : await utilities.logo();
   const { account_firstname, account_lastname, account_email, account_password } = req.body
 
   // Hash the password before storing
@@ -40,6 +45,7 @@ async function registerAccount(req, res) {
     res.status(500).render("account/register", {
       title: "Registration",
       nav,
+      logo,
       errors: null,
     })
   }
@@ -76,6 +82,8 @@ async function registerAccount(req, res) {
  * ************************************ */
 async function accountLogin(req, res) {
   let nav = await utilities.getNav()
+  const loggedin = res.locals.loggedin;
+  const logo = loggedin ? await utilities.logoout() : await utilities.logo();
   const { account_email, account_password } = req.body
   const accountData = await accountModel.getAccountByEmail(account_email)
   if (!accountData) {
@@ -83,6 +91,7 @@ async function accountLogin(req, res) {
    res.status(400).render("account/login", {
     title: "Login",
     nav,
+    logo,
     errors: null,
     account_email,
    })
@@ -105,10 +114,11 @@ async function accountLogin(req, res) {
  }
  
 
- async function accountView(req, res, next) {
+async function accountView(req, res, next) {
   try {
     // Obtener el estado de inicio de sesión del cliente y establecer las variables en consecuencia
     const loggedin = res.locals.loggedin;
+    const logo = loggedin ? await utilities.logoout() : await utilities.logo();
     const nav = await utilities.getNav();
     
     // Obtener el término de búsqueda, si existe
@@ -150,6 +160,7 @@ async function accountLogin(req, res) {
       loggedin,
       title: `Bienvenido ${res.locals.accountData.account_firstname}`,
       nav,
+      logo,
       errors: null,
       menuPedidos: table, // Ahora pasa la tabla generada a la vista
     });

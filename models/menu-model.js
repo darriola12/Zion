@@ -63,6 +63,7 @@ async function getPedidosInfoById(pedido_id) {
         p.entregado,
         p.reportado,
         p.incompleto,
+        p.comentarios,
         imgf.url 
       FROM 
         public.clientes c
@@ -97,4 +98,44 @@ async function getPedidosInfoById(pedido_id) {
 }
 
 
-module.exports = {getPedidos, getPedidosInfoById};
+
+async function updatePedido(pedido_id, cliente_id, nombre, correo, area, mision, producto, cantidad, precio, reportado, entregado, incompleto, comentarios) {
+  try {
+    // Iniciar la transacción
+    await pool.query('BEGIN');
+
+    // Actualizar la tabla 'clientes'
+    const updateClienteSql = `
+      UPDATE public.clientes 
+      SET nombre = $1, correo = $2, area = $3, mision = $4
+      WHERE cliente_id = $5
+    `;
+    const updateClienteResult = await pool.query(updateClienteSql, [nombre, correo, area, mision, cliente_id]);
+
+    // Actualizar la tabla 'pedidos'
+    const updatePedidoSql = `
+      UPDATE public.pedidos 
+      SET producto = $1, cantidad = $2, precio = $3, reportado = $4, entregado = $5, incompleto = $6, comentarios = $7
+      WHERE pedido_id = $8
+    `;
+    const updatePedidoResult = await pool.query(updatePedidoSql, [producto, cantidad, precio, reportado, entregado, incompleto, comentarios, pedido_id]);
+
+    // Confirmar la transacción
+    await pool.query('COMMIT');
+
+    // Devuelve el resultado de las actualizaciones
+    return {
+      message: 'Pedido y cliente actualizados correctamente',
+      clienteActualizado: updateClienteResult.rowCount,  // Número de filas actualizadas en 'clientes'
+      pedidoActualizado: updatePedidoResult.rowCount     // Número de filas actualizadas en 'pedidos'
+    };
+  } catch (error) {
+    // Revertir la transacción en caso de error
+    await pool.query('ROLLBACK');
+    console.error("Error al actualizar el pedido y cliente:", error);
+    throw new Error('Error al actualizar el pedido y cliente');
+  }
+}
+
+
+module.exports = {getPedidos, getPedidosInfoById, updatePedido};

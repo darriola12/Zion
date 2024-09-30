@@ -42,6 +42,15 @@
     right: 40px;
 
 }
+.account-logout-button{
+
+    text-decoration: none;
+    margin-right: 80px;
+	color: white; 
+	font-size: 25px;
+
+}
+
 
 .notice li{
 

@@ -20,8 +20,9 @@ router.post(
     regValidate.checkLoginEmail,
     utilities.handleErrors(accountController.accountLogin)
 )
-router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.accountView));
-router.post("/q", utilities.checkLogin, utilities.handleErrors(accountController.accountView));
+router.get("/", utilities.checkAcess, utilities.handleErrors(accountController.accountView));
+router.post("/q", utilities.checkAcess, utilities.handleErrors(accountController.accountView));
+router.get("/logout", utilities.logout )
 
 
 
