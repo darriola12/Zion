@@ -42,11 +42,11 @@ async function registerAccount(req, res) {
     hashedPassword = await bcrypt.hashSync(account_password, 10)
   } catch (error) {
     req.flash("notice", 'Sorry, there was an error processing the registration.')
-    res.status(500).render("account/register", {
+    res.status(500).render("account/login", {
       title: "Registration",
       nav,
-      logo,
       errors: null,
+      logo
     })
   }
 
@@ -116,20 +116,36 @@ async function accountLogin(req, res) {
 
 async function accountView(req, res, next) {
   try {
-    // Obtener el estado de inicio de sesión del cliente y establecer las variables en consecuencia
     const loggedin = res.locals.loggedin;
     const logo = loggedin ? await utilities.logoout() : await utilities.logo();
     const nav = await utilities.getNav();
     
-    // Obtener el término de búsqueda, si existe
-    const searchQuery = req.body.q || ''; // Cambié a cadena vacía si no hay búsqueda
+    const searchQuery = req.body.q || ''; 
     console.log(`Search query: ${searchQuery}`);
     
     // Obtener los datos de los pedidos
     const data = await menuModel.getPedidos(searchQuery);
     
+    // Agrupar los pedidos por cliente
+    const groupedData = {};
+    data.rows.forEach((row) => {
+      const clienteKey = row.nombre; // Clave para agrupar por nombre
+      if (!groupedData[clienteKey]) {
+        // Si el cliente no está en el objeto, lo inicializamos
+        groupedData[clienteKey] = {
+          cliente_id: row.cliente_id,  // Asegurarte de que cliente_id se almacene aquí
+          correo: row.correo,
+          area: row.area,
+          mision: row.mision,
+          pedidoIds: []
+        };
+      }
+      // Agregar el pedido_id al cliente correspondiente
+      groupedData[clienteKey].pedidoIds.push(row.pedido_id);
+    });
+
     // Crear la tabla HTML
-    let table = '<table class="table-pedidos">'; // Añade una clase específica
+    let table = '<table class="table-pedidos">';
     table += '<thead class="table-header">';
     table += '<tr>';
     table += '<th class="table-cell">Nombre</th>';
@@ -141,16 +157,24 @@ async function accountView(req, res, next) {
     table += '</thead>';
     table += '<tbody class="table-body">';
     
-    // Agregar filas a la tabla
-    data.rows.forEach((row) => {
+    // Agregar filas a la tabla con los datos agrupados
+    for (const cliente in groupedData) {
+      const { cliente_id, correo, area, mision, pedidoIds } = groupedData[cliente];  // Asegurarte de extraer cliente_id aquí
       table += '<tr class="table-row">';
-      table += `<td class="table-cell">${row.nombre}</td>`;
-      table += `<td class="table-cell">${row.correo}</td>`;  
-      table += `<td class="table-cell">${row.area}</td>`;
-      table += `<td class="table-cell">${row.mision}</td>`;
-      table += `<td class="table-cell"><a class="table-link" href="/pedidos/pedido/${row.pedido_id}">${row.pedido_id}</a></td>`;
+      table += `<td class="table-cell">${cliente}</td>`;
+      table += `<td class="table-cell">${correo}</td>`;
+      table += `<td class="table-cell">${area}</td>`;
+      table += `<td class="table-cell">${mision}</td>`;
+  
+      // Crear enlaces individuales para cada pedido_id
+      const pedidoLinks = pedidoIds.map(id => 
+        `<a class="table-link" href="/pedidos/pedido/${id}">${id}</a>`
+      ).join(', '); // Unir los enlaces en una cadena separada por comas
+
+      table += `<td class="table-cell">${pedidoLinks}</td>`;
+      // Añadir el botón o enlace "Añadir Pedido" correctamente con cliente_id
       table += '</tr>';
-    });
+    }
     
     table += '</tbody>';
     table += '</table>';
@@ -162,15 +186,13 @@ async function accountView(req, res, next) {
       nav,
       logo,
       errors: null,
-      menuPedidos: table, // Ahora pasa la tabla generada a la vista
+      menuPedidos: table,
     });
   } catch (error) {
     console.error("Error rendering account view:", error);
     return res.status(500).send("Internal Server Error");
   }
 }
-
-
 
 
 

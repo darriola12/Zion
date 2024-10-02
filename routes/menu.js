@@ -8,6 +8,8 @@ const searchBar = require("../controllers/searchBarPedidos")
 router.get("/pedido/:pedido_id", utilities.handleErrors(pedidoController.PedidosInfoView)); 
 router.get("/editar-pedido/:pedido_id", utilities.handleErrors(pedidoController.editarPedido));
 router.post("/editar-pedido/:pedido_id", utilities.handleErrors(pedidoController.updatePedido));
+// router.get("/añadir-pedido", utilities.handleErrors(pedidoController.añadirPedidoView))
+// router.post("/añadir-pedido", utilities.handleErrors(pedidoController.añadirPedido))
 
 
 

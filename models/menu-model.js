@@ -13,6 +13,7 @@ async function getPedidos(searchQuery) {
     // Si hay un término de búsqueda, usa el filtro
     query = `
       SELECT 
+        c.cliente_id,
         c.nombre, 
         c.correo, 
         c.area, 
@@ -70,7 +71,7 @@ async function getPedidosInfoById(pedido_id) {
       JOIN 
         public.pedidos p ON c.cliente_id = p.cliente_id
       JOIN 
-        public.imagen_factura imgf ON p.pedido_id = imgf.pedido_id
+        public.imagen_productos imgf ON p.pedido_id = imgf.pedido_id
       WHERE 
         p.pedido_id = $1
     `;

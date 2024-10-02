@@ -23,6 +23,11 @@ CREATE TABLE public.pedidos (
     cantidad INT NOT NULL,
     precio DECIMAL(10, 2) NOT NULL,
     fecha DATE NOT NULL,
+    imagen_factura BOOLEAN DEFAULT FALSE,
+    entregado BOOLEAN DEFAULT FALSE,
+    reportado BOOLEAN DEFAULT FALSE,
+    incompleto BOOLEAN DEFAULT FALSE,
+    comentarios TEXT,
     FOREIGN KEY (cliente_id) REFERENCES public.clientes(cliente_id) ON DELETE CASCADE
 );
 -- Crear tabla de imagenes de productos

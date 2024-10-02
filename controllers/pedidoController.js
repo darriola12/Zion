@@ -61,6 +61,14 @@ async function updatePedido(req, res, next) {
     res.redirect(`/pedidos/pedido/${pedido_id}`);
 }
 
+// async function añadirPedidoView(){
+
+    
+    
+
+
+// }
+
 
 module.exports = {PedidosInfoView, editarPedido, updatePedido}
 
