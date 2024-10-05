@@ -1,8 +1,6 @@
 const utilities = require("../utilities/")
 const accountModel = require("../models/account-model")
 const menuModel = require("../models/menu-model")
-
-
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
 const bcrypt = require("bcryptjs")
@@ -19,8 +17,8 @@ async function buildLogin(req, res, next) {
     res.render("account/login", {
       title: "Login",
       nav,
-      logo,
       errors: null,
+      logo
     })
 }
 
@@ -34,6 +32,7 @@ async function registerAccount(req, res) {
   const loggedin = res.locals.loggedin;
   const logo = loggedin ? await utilities.logoout() : await utilities.logo();
   const { account_firstname, account_lastname, account_email, account_password } = req.body
+  console.log(account_firstname, account_lastname, account_email, account_password )
 
   // Hash the password before storing
   let hashedPassword
@@ -46,7 +45,7 @@ async function registerAccount(req, res) {
       title: "Registration",
       nav,
       errors: null,
-      logo
+      
     })
   }
 
@@ -72,6 +71,7 @@ async function registerAccount(req, res) {
     res.status(501).render("account/login", {
       title: "Login",
       nav,
+      logo
     })
   }
 }
